@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "prop-types": "^15.7.2",
     "@testing-library/jest-dom": "4.2.4",
     "@testing-library/react": "9.5.0",
     "@testing-library/user-event": "7.2.1",
@@ -23,6 +24,7 @@
     "test": "react-scripts test",
     "test-coverage": "react-scripts test --coverage --watchAll=false",
     "eject": "react-scripts eject",
+    "lint:styles": "npx stylelint '**/*.css'",
     "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json . --ext .js,.jsx"
   },
   "eslintConfig": {
@@ -41,8 +43,13 @@
     ]
   },
   "devDependencies": {
-    "eslint": "6.8.0",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb": "^18.2.1",
     "eslint-config-trybe-frontend": "1.2.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.26.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "stylelint": "13.8.0",
     "stylelint-order": "4.1.0"
   }

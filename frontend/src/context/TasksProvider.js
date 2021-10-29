@@ -4,17 +4,31 @@ import TasksContext from './TasksContext';
 import { getAllTasks } from '../services/tasksAPI';
 
 const TasksProvider = ({ children }) => {
-  const [tasks, setTasks] = useState({ tasks: [], isLoading: true });
+  const [tasks, setTasks] = useState([]);
+  const [isFetching, setIsFetching] = useState(true);
+  const [reload, setReload] = useState(false);
+
+  const fetchApi = async () => {
+    const response = await getAllTasks();
+
+    if (response.statusText === 'OK') {
+      setTasks(response.data);
+      setIsFetching(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchApi = async () => {
-      const response = await getAllTasks();
-      setTasks(response.data);
-    };
     fetchApi();
   }, []);
 
-  const allStates = { tasks, setTasks };
+  useEffect(() => {
+    if (reload) {
+      fetchApi();
+      setReload(false);
+    }
+  }, [reload]);
+
+  const allStates = { tasks, setTasks, isFetching, setIsFetching, reload, setReload };
 
   return (
     <TasksContext.Provider value={ allStates }>
