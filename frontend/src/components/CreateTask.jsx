@@ -49,7 +49,6 @@ const CreateTask = () => {
           name="status"
           id="task-status"
           placeholder="status"
-          defaultValue="pendente"
           onChange={ ((e) => handleChange(e, setStatus)) }
           value={ status }
         >
@@ -65,7 +64,6 @@ const CreateTask = () => {
           name="date"
           id="task-date"
           type="date"
-          defaultValue={ today }
           onChange={ ((e) => handleChange(e, setCreatedAt)) }
           value={ createdAt }
         />

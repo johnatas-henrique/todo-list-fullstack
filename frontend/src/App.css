@@ -38,6 +38,7 @@ input, select {
   border: 2px solid white;
   margin: 0.5em 2em;
   padding: 0.5em;
+  width: 12em;
 }
 
 .three-row {
@@ -58,8 +59,9 @@ input, select {
   border-radius: 10%;
   color: black;
   font-size: 1em;
+  margin-bottom: 0.5em;
   text-align: center;
-  width: 100%;
+  width: 50%;
 }
 
 .complete-space {
