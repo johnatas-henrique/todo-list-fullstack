@@ -1,10 +1,16 @@
-const { findTasks } = require('../models/tasks');
+const { findTasks, postTask } = require('../models/tasks');
 
-const getAllServices = async () => {
+const getAllService = async () => {
   const resultBD = await findTasks();
   return resultBD;
 };
 
+const postService = async (reqInfo) => {
+  const resultBD = await postTask(reqInfo);
+  return resultBD;
+};
+
 module.exports = {
-  getAllServices,
+  getAllService,
+  postService,
 };
