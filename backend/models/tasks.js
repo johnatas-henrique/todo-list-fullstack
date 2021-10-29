@@ -12,12 +12,6 @@ const postTask = async (reqInfo) => {
     .then(({ insertedId }) => ({ _id: insertedId, ...reqInfo }));
 };
 
-const getTask = async (id) => {
-  const db = await connection();
-  if (!ObjectId.isValid(id)) return null;
-  return db.collection('Tasks').findOne(ObjectId(id));
-};
-
 const putTask = async (reqInfo, id) => {
   const db = await connection();
   await db.collection('Tasks')
@@ -28,13 +22,13 @@ const putTask = async (reqInfo, id) => {
 const deleteTask = async (id) => {
   const db = await connection();
   if (!ObjectId.isValid(id)) return null;
-  return db.collection('Tasks').deleteOne({ _id: ObjectId(id) });
+  await db.collection('Tasks').deleteOne({ _id: ObjectId(id) });
+  return null;
 };
 
 module.exports = {
   findTasks,
   postTask,
-  getTask,
   putTask,
   deleteTask,
 };

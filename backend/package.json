@@ -7,7 +7,9 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "lint": "eslint --no-inline-config --ext .js,.jsx --no-error-on-unmatched-pattern -c .eslintrc.json .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev:test": "mocha ./integration-tests/**/*$NAME*.{test,spec}.js --exit",
+    "dev:test:coverage": "nyc --all npm run dev:test"
   },
   "author": "",
   "license": "ISC",
@@ -21,8 +23,15 @@
     "nodemon": "^2.0.14"
   },
   "devDependencies": {
+    "chai": "^4.3.4",
+    "chai-http": "^4.3.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.25.2"
+    "eslint-config-trybe-backend": "^1.0.4",
+    "eslint-plugin-import": "^2.25.2",
+    "mocha": "^9.1.3",
+    "mongodb-memory-server": "6.9.6",
+    "nyc": "^15.1.0",
+    "sinon": "^11.1.2"
   }
 }

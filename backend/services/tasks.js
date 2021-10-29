@@ -1,4 +1,4 @@
-const { findTasks, postTask, getTask, putTask, deleteTask } = require('../models/tasks');
+const { findTasks, postTask, putTask, deleteTask } = require('../models/tasks');
 
 const getAllService = async () => {
   const resultDB = await findTasks();
@@ -11,9 +11,10 @@ const postService = async (reqInfo) => {
 };
 
 const putService = async (reqInfo, id) => {
-  const resultDB1 = await getTask(id);
-  if (!resultDB1) {
-    return { error: true, message: 'Tarefa não encontrada', code: 'not_found' };
+  const resultDB1 = await findTasks();
+  const findTaskById = resultDB1.find(({ _id }) => _id === id);
+  if (!findTaskById) {
+    return { error: true, message: 'Tarefa não encontrada', code: 'notFound' };
   }
   const resultDB2 = await putTask(reqInfo, id);
   return resultDB2;

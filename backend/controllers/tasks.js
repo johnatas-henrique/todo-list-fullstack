@@ -33,8 +33,7 @@ const putTask = rescue(async (req, res, next) => {
 const deleteTask = rescue(async (req, res) => {
   const { id } = req.params;
   const serviceReturn = await deleteService(id);
-  console.log(serviceReturn);
-  return res.status(204).json({ message: 'Tarefa apagada com sucesso' });
+  return res.status(204).json(serviceReturn);
 });
 
 module.exports = {

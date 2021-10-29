@@ -5,7 +5,7 @@
         "node": true
     },
     "extends": [
-        "airbnb-base"
+        "trybe-backend"
     ],
     "parserOptions": {
         "ecmaVersion": 12
