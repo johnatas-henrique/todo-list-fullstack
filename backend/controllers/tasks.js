@@ -1,5 +1,5 @@
 const rescue = require('express-rescue');
-const { getAllService, postService, putService } = require('../services/tasks');
+const { getAllService, postService, putService, deleteService } = require('../services/tasks');
 const schemasJoi = require('./schemasJoi');
 const { joiError } = require('./errors');
 
@@ -30,8 +30,16 @@ const putTask = rescue(async (req, res, next) => {
   return res.status(200).json(serviceReturn);
 });
 
+const deleteTask = rescue(async (req, res) => {
+  const { id } = req.params;
+  const serviceReturn = await deleteService(id);
+  console.log(serviceReturn);
+  return res.status(204).json({ message: 'Tarefa apagada com sucesso' });
+});
+
 module.exports = {
   getAllTasks,
   postTask,
   putTask,
+  deleteTask,
 };

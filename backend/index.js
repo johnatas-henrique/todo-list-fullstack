@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const { getAllTasks, postTask, putTask } = require('./controllers/tasks');
+const { getAllTasks, postTask, putTask, deleteTask } = require('./controllers/tasks');
 const { otherError } = require('./controllers/errors');
 
 const app = express();
@@ -11,6 +11,7 @@ const PORT = process.env.API_PORT || 3000;
 app.get('/tasks', getAllTasks);
 app.post('/tasks', postTask);
 app.put('/tasks/:id', putTask);
+app.delete('/tasks/:id', deleteTask);
 
 app.use(otherError);
 

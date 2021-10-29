@@ -1,4 +1,4 @@
-const { findTasks, postTask, getTask, putTask } = require('../models/tasks');
+const { findTasks, postTask, getTask, putTask, deleteTask } = require('../models/tasks');
 
 const getAllService = async () => {
   const resultDB = await findTasks();
@@ -19,8 +19,14 @@ const putService = async (reqInfo, id) => {
   return resultDB2;
 };
 
+const deleteService = async (id) => {
+  const resultDB = await deleteTask(id);
+  return resultDB;
+};
+
 module.exports = {
   getAllService,
   postService,
   putService,
+  deleteService,
 };

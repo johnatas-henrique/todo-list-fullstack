@@ -25,9 +25,16 @@ const putTask = async (reqInfo, id) => {
   return { _id: id, ...reqInfo };
 };
 
+const deleteTask = async (id) => {
+  const db = await connection();
+  if (!ObjectId.isValid(id)) return null;
+  return db.collection('Tasks').deleteOne({ _id: ObjectId(id) });
+};
+
 module.exports = {
   findTasks,
   postTask,
   getTask,
   putTask,
+  deleteTask,
 };
