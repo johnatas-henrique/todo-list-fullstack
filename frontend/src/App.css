@@ -15,11 +15,10 @@
 }
 
 .App-header {
-  align-items: center;
   background-color: #282c34;
   color: white;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   font-size: calc(10px + 2vmin);
   justify-content: center;
   min-height: 100vh;

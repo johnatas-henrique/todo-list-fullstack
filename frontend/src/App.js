@@ -1,12 +1,12 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import TasksProvider from './context/TasksProvider';
 
-function App() {
-  return (
+const App = () => (
+  <TasksProvider>
     <div className="App">
       <header className="App-header">
-        <img src={ logo } className="App-logo" alt="logo" />
+        {/* <img src={ logo } className="App-logo" alt="logo" />
         <p>
           Edit
           {' '}
@@ -21,10 +21,10 @@ function App() {
           rel="noopener noreferrer"
         >
           Learn React
-        </a>
+        </a> */}
+        <h1>Ebtyr - Tarefas</h1>
       </header>
     </div>
-  );
-}
-
+  </TasksProvider>
+);
 export default App;
