@@ -12,7 +12,7 @@ const postService = async (reqInfo) => {
 
 const putService = async (reqInfo, id) => {
   const resultDB1 = await findTasks();
-  const findTaskById = resultDB1.find(({ _id }) => _id === id);
+  const findTaskById = resultDB1.find(({ _id }) => _id.toString() === id);
   if (!findTaskById) {
     return { error: true, message: 'Tarefa não encontrada', code: 'notFound' };
   }
