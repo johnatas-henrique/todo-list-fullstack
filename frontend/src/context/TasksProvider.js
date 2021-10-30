@@ -4,9 +4,17 @@ import TasksContext from './TasksContext';
 import { getAllTasks } from '../services/tasksAPI';
 
 const TasksProvider = ({ children }) => {
+  const arrDateSlash = new Date().toLocaleDateString().split('/');
+  const today = `${arrDateSlash[2]}-${arrDateSlash[1]}-${arrDateSlash[0]}`;
+
   const [tasks, setTasks] = useState([]);
   const [isFetching, setIsFetching] = useState(true);
   const [reload, setReload] = useState(false);
+  const [name, setName] = useState('');
+  const [status, setStatus] = useState('pendente');
+  const [createdAt, setCreatedAt] = useState(today);
+  const [isEdit, setIsEdit] = useState(false);
+  const [sort, setSort] = useState('sem ordenação');
 
   const fetchApi = async () => {
     const response = await getAllTasks();
@@ -28,7 +36,24 @@ const TasksProvider = ({ children }) => {
     }
   }, [reload]);
 
-  const allStates = { tasks, setTasks, isFetching, setIsFetching, reload, setReload };
+  const allStates = {
+    tasks,
+    setTasks,
+    isFetching,
+    setIsFetching,
+    reload,
+    setReload,
+    name,
+    setName,
+    status,
+    setStatus,
+    createdAt,
+    setCreatedAt,
+    isEdit,
+    setIsEdit,
+    sort,
+    setSort,
+  };
 
   return (
     <TasksContext.Provider value={ allStates }>

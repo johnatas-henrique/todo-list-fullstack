@@ -1,32 +1,65 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import TasksContext from '../context/TasksContext';
 
-import { postTask } from '../services/tasksAPI';
+import { postTask, putTask } from '../services/tasksAPI';
 
 const handleChange = (e, callback) => {
   const { value } = e.target;
   callback(value);
 };
 
-const postNewTask = async (obj, callback, objCallbacks) => {
+const putThisTask = async (obj, callback, taskId, objCallbacks) => {
   const { name, status, createdAt } = obj;
-  const date = new Date(createdAt).toLocaleDateString('br');
-  const response = await postTask({ name, status, createdAt: date });
-  if (response.statusText === 'Created') {
+  const arrDate = createdAt.split('-');
+  const date = `${arrDate[2]}/${arrDate[1]}/${arrDate[0]}`;
+
+  const response = await putTask({ name, status, createdAt: date }, taskId);
+  if (response.code) alert(response.message);
+
+  if (response.statusText === 'OK') {
     callback(true);
-    const { setName, setStatus, setCreatedAt } = objCallbacks;
+    const { setName, setStatus, setCreatedAt, setIsEdit } = objCallbacks;
     setName('');
     setStatus('pendente');
-    setCreatedAt(new Date().toISOString().split('T')[0]);
+    const arrDateSlash = new Date().toLocaleDateString().split('/');
+    const dateSlash = `${arrDateSlash[2]}-${arrDateSlash[1]}-${arrDateSlash[0]}`;
+    setCreatedAt(dateSlash);
+    setIsEdit(false);
+  }
+};
+
+const postNewTask = async (obj, callback, objCallbacks) => {
+  const { name, status, createdAt } = obj;
+  const arrDate = createdAt.split('-');
+  const date = `${arrDate[2]}/${arrDate[1]}/${arrDate[0]}`;
+
+  const response = await postTask({ name, status, createdAt: date });
+  if (response.code) alert(response.message);
+
+  if (response.statusText === 'Created') {
+    callback(true);
+    const { setName, setStatus, setCreatedAt, setIsEdit } = objCallbacks;
+    setName('');
+    setStatus('pendente');
+    const arrDateSlash = new Date().toLocaleDateString().split('/');
+    const dateSlash = `${arrDateSlash[2]}-${arrDateSlash[1]}-${arrDateSlash[0]}`;
+    setCreatedAt(dateSlash);
+    setIsEdit(false);
   }
 };
 
 const CreateTask = () => {
-  const today = new Date().toISOString().split('T')[0];
-  const [name, setName] = useState('');
-  const [status, setStatus] = useState('pendente');
-  const [createdAt, setCreatedAt] = useState(today);
-  const { setReload } = useContext(TasksContext);
+  const {
+    setReload,
+    name,
+    setName,
+    status,
+    setStatus,
+    createdAt,
+    setCreatedAt,
+    isEdit,
+    setIsEdit,
+  } = useContext(TasksContext);
 
   return (
     <section className="create-new-task">
@@ -71,10 +104,25 @@ const CreateTask = () => {
 
       <button
         type="button"
+        className="yellow-button"
+        hidden={ !isEdit }
+        onClick={ (() => putThisTask(
+          { name, status, createdAt },
+          setReload,
+          isEdit,
+          { setName, setStatus, setCreatedAt, setIsEdit },
+        )) }
+      >
+        Editar tarefa
+      </button>
+
+      <button
+        type="button"
         className="green-button"
+        hidden={ isEdit }
         onClick={ (() => postNewTask(
           { name, status, createdAt },
-          setReload, { setName, setStatus, setCreatedAt },
+          setReload, { setName, setStatus, setCreatedAt, setIsEdit },
         )) }
       >
         Salvar nova tarefa

@@ -45,11 +45,22 @@ input, select {
   width: 30%;
 }
 
+.yellow-button {
+  background-color: #99af1b;
+  border-radius: 10%;
+  color: #282c34;
+  font-size: 1em;
+  font-weight: 700;
+  text-align: center;
+  width: 10%;
+}
+
 .green-button {
   background-color: #035307;
   border-radius: 10%;
   color: white;
   font-size: 1em;
+  font-weight: 700;
   text-align: center;
   width: 10%;
 }
