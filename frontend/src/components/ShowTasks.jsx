@@ -3,8 +3,18 @@ import TasksContext from '../context/TasksContext';
 import { deleteTask } from '../services/tasksAPI';
 
 const handleChange = (e, callback) => {
+  const { setSort, setReload, tasks, setTasks } = callback;
   const { value } = e.target;
-  callback(value);
+  setSort(value);
+  if (value === 'sem ordenação') {
+    setReload(true);
+  }
+  if (value !== 'sem ordenação') {
+    const sortedTasks = tasks.sort(
+      (a, b) => a[value].toLowerCase().localeCompare(b[value].toLowerCase()),
+    );
+    setTasks(sortedTasks);
+  }
 };
 
 const deleteThisTask = async (taskId, reload, edit) => {
@@ -31,6 +41,7 @@ const editTask = (taskId, allTasks, callback, setFunctions) => {
 const ShowTasks = () => {
   const {
     tasks,
+    setTasks,
     isFetching,
     setReload,
     setIsEdit,
@@ -48,18 +59,20 @@ const ShowTasks = () => {
         <>
           <div>
             <label htmlFor="task-status" className="three-row">
-              <p>Status</p>
+              <p>Ordenação</p>
               <select
                 name="status"
                 id="task-status"
                 placeholder="status"
-                onChange={ ((e) => handleChange(e, setSort)) }
+                onChange={ ((e) => handleChange(
+                  e, { setSort, setReload, tasks, setTasks },
+                )) }
                 value={ sort }
               >
                 <option value="sem ordenação">Sem ordenação</option>
-                <option value="nome">Nome</option>
+                <option value="name">Nome</option>
                 <option value="status">Status</option>
-                <option value="data">Data</option>
+                <option value="createdAt">Data</option>
               </select>
             </label>
           </div>
