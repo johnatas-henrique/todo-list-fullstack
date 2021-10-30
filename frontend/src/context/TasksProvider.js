@@ -9,32 +9,34 @@ const TasksProvider = ({ children }) => {
 
   const [tasks, setTasks] = useState([]);
   const [isFetching, setIsFetching] = useState(true);
-  const [reload, setReload] = useState(false);
+  const [reload, setReload] = useState(true);
   const [name, setName] = useState('');
   const [status, setStatus] = useState('pendente');
   const [createdAt, setCreatedAt] = useState(today);
   const [isEdit, setIsEdit] = useState(false);
   const [sort, setSort] = useState('sem ordenação');
 
-  const fetchApi = async () => {
-    const response = await getAllTasks();
-
-    if (response.statusText === 'OK') {
-      setTasks(response.data);
+  useEffect(() => {
+    const fetchApi = async () => {
+      const response = await getAllTasks();
+      console.log('nova fetch');
+      let newFetch;
+      if (response.statusText === 'OK') {
+        newFetch = response.data;
+      }
+      if (sort !== 'sem ordenação') {
+        newFetch = newFetch.sort(
+          (a, b) => a[sort].toLowerCase().localeCompare(b[sort].toLowerCase()),
+        );
+      }
+      setTasks(newFetch);
       setIsFetching(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchApi();
-  }, []);
-
-  useEffect(() => {
+    };
     if (reload) {
       fetchApi();
       setReload(false);
     }
-  }, [reload]);
+  }, [reload, sort]);
 
   const allStates = {
     tasks,

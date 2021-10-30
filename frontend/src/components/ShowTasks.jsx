@@ -65,7 +65,7 @@ const ShowTasks = () => {
                 id="task-status"
                 placeholder="status"
                 onChange={ ((e) => handleChange(
-                  e, { setSort, setReload, tasks, setTasks },
+                  e, { sort, setSort, setReload, tasks, setTasks },
                 )) }
                 value={ sort }
               >
