@@ -8,16 +8,16 @@ const handleChange = (e, callback) => {
   callback(value);
 };
 
-const putThisTask = async (obj, callback, taskId, objCallbacks) => {
+const putThisTask = async (obj, reload, taskId, objCallbacks) => {
   const { name, status, createdAt } = obj;
   const arrDate = createdAt.split('-');
   const date = `${arrDate[2]}/${arrDate[1]}/${arrDate[0]}`;
 
   const response = await putTask({ name, status, createdAt: date }, taskId);
-  if (response.code) alert(response.message);
+  // if (response.code) alert(response.message);
 
   if (response.statusText === 'OK') {
-    callback(true);
+    reload(true);
     const { setName, setStatus, setCreatedAt, setIsEdit } = objCallbacks;
     setName('');
     setStatus('pendente');
@@ -34,7 +34,7 @@ const postNewTask = async (obj, callback, objCallbacks) => {
   const date = `${arrDate[2]}/${arrDate[1]}/${arrDate[0]}`;
 
   const response = await postTask({ name, status, createdAt: date });
-  if (response.code) alert(response.message);
+  // if (response.code) alert(response.message);
 
   if (response.statusText === 'Created') {
     callback(true);

@@ -19,8 +19,7 @@ const handleChange = (e, callback) => {
 
 const deleteThisTask = async (taskId, reload, edit) => {
   const response = await deleteTask(taskId);
-  if (response.code) alert(response.message);
-
+  // if (response.code) alert(response.message);
   if (response.statusText === 'No Content') {
     reload(true);
     edit(false);
@@ -58,12 +57,13 @@ const ShowTasks = () => {
       : (
         <>
           <div>
-            <label htmlFor="task-status" className="three-row">
-              <p>Ordenação</p>
+            <label htmlFor="task-order" className="three-row">
+              <p>Ordenar por</p>
               <select
-                name="status"
-                id="task-status"
-                placeholder="status"
+                name="order"
+                id="task-order"
+                placeholder="order"
+                data-testid="task-order"
                 onChange={ ((e) => handleChange(
                   e, { sort, setSort, setReload, tasks, setTasks },
                 )) }
@@ -78,18 +78,20 @@ const ShowTasks = () => {
           </div>
 
           <section className="show-tasks">
-            {tasks.map(({ _id, name, status, createdAt }) => (
+            {tasks.map(({ _id, name, status, createdAt }, index) => (
               <div key={ _id } className="task-item">
-                <h2>{name}</h2>
-                <p>{status.toString().charAt(0).toUpperCase() + status.slice(1)}</p>
+                <h2 data-testid={ `name-task-${index}` }>{name}</h2>
+                <p data-testid={ `status-task-${index}` }>
+                  {status.toString().charAt(0).toUpperCase() + status.slice(1)}
+                </p>
                 <p>
                   Criada em:
-                  <br />
-                  {createdAt}
                 </p>
+                <p data-testid={ `created-at-task-${index}` }>{createdAt}</p>
                 <button
                   type="button"
                   className="edit-button"
+                  data-testid={ `edit-button-task-${index}` }
                   onClick={ (() => editTask(
                     _id, tasks, setIsEdit, { setName, setStatus, setCreatedAt },
                   )) }
@@ -99,6 +101,7 @@ const ShowTasks = () => {
                 <button
                   type="button"
                   className="edit-button"
+                  data-testid={ `delete-button-task-${index}` }
                   onClick={ (() => deleteThisTask(_id, setReload, setIsEdit)) }
                 >
                   Apagar

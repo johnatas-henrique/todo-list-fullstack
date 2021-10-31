@@ -19,7 +19,6 @@ const TasksProvider = ({ children }) => {
   useEffect(() => {
     const fetchApi = async () => {
       const response = await getAllTasks();
-      console.log('nova fetch');
       let newFetch;
       if (response.statusText === 'OK') {
         newFetch = response.data;
