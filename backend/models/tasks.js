@@ -6,6 +6,12 @@ const findTasks = async () => {
   return db.collection('Tasks').find().toArray();
 };
 
+const getTask = async (id) => {
+  const db = await connection();
+  if (!ObjectId.isValid(id)) return null;
+  return db.collection('Tasks').findOne(ObjectId(id));
+};
+
 const postTask = async (reqInfo) => {
   const db = await connection();
   return db.collection('Tasks').insertOne(reqInfo)
@@ -28,6 +34,7 @@ const deleteTask = async (id) => {
 
 module.exports = {
   findTasks,
+  getTask,
   postTask,
   putTask,
   deleteTask,

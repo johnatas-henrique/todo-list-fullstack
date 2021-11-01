@@ -1,7 +1,7 @@
 const chai = require('chai');
 const sinon = require('sinon');
 const chaiHttp = require('chai-http');
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 const { getConnection } = require('./connectionMock');
 const app = require('../index');
 
@@ -23,6 +23,31 @@ describe('Testes para a rota /tasks', function () {
   after(async function () {
     MongoClient.connect.restore();
     await connectionMock.db('Ebytr').collection('Tasks').deleteMany({});
+  });
+
+  describe('Em caso de erro desconhecido', function () {
+    let response;
+
+    before(async function () {
+      MongoClient.connect.resolves(null);
+      response = await chai.request(app).get('/tasks');
+    });
+
+    after(async function () {
+      MongoClient.connect.resolves(connectionMock);
+    });
+
+    it('deve receber um código HTTP 500', function () {
+      expect(response).to.have.status(500);
+    });
+
+    it('Deve receber um objeto de erro', function () {
+      expect(response.body).to.be.an('object');
+    });
+
+    it('Deve retornar uma mensagem de erro do banco de dados', function () {
+      expect(response.body.message).to.be.equal('Cannot read property \'db\' of null');
+    });
   });
 
   describe('Testes para o endpoint GET', function () {
@@ -157,7 +182,7 @@ describe('Testes para a rota /tasks', function () {
       before(async function () {
         await connectionMock.db('Ebytr').collection('Tasks')
           .insertOne({
-            _id: VALID_ID_1,
+            _id: ObjectId(VALID_ID_1),
             name: 'Fazer testes 001',
             status: 'pendente',
             createdAt: '28/10/2021',

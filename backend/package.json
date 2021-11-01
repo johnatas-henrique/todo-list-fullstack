@@ -7,9 +7,8 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "lint": "eslint --no-inline-config --ext .js,.jsx --no-error-on-unmatched-pattern -c .eslintrc.json .",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev:test": "mocha ./integration-tests/**/*$NAME*.{test,spec}.js --exit",
-    "dev:test:coverage": "nyc --all npm run dev:test"
+    "test": "mocha ./integration-tests/**/*$TEST_NAME*.{test,spec}.js --exit",
+    "test:coverage": "nyc --all npm test"
   },
   "author": "",
   "license": "ISC",
