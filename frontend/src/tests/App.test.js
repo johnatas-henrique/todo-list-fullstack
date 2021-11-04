@@ -3,6 +3,7 @@ import { act, wait, cleanup, render, screen, fireEvent } from '@testing-library/
 import axios from 'axios';
 import App from '../App';
 import { axiosGet, axiosPost, axiosPut } from './testData';
+import { getTodayWithDashes } from '../date';
 
 const createdAtLabel = 'Data da criação';
 const buttonSaveTaskLabel = 'Salvar nova tarefa';
@@ -21,8 +22,8 @@ const mockAxiosPut = () => {
 };
 const mockAxiosPost = () => {
   const { name, status, createdAt } = axiosPost;
-  jest.spyOn(axios, 'put').mockImplementation(() => Promise
-    .resolve({ status: 200, statusText: 'OK', data: { name, status, createdAt } }));
+  jest.spyOn(axios, 'post').mockImplementation(() => Promise
+    .resolve({ status: 200, statusText: 'Created', data: { name, status, createdAt } }));
 };
 const mockAxiosDelete = () => {
   jest.spyOn(axios, 'delete').mockImplementation(() => Promise
@@ -58,6 +59,7 @@ describe('Teste da aplicação inteira', () => {
   });
 
   it('renderiza o componente ShowTasks, antes da requisição finalizada', async () => {
+    mockAxiosGetParam(axiosGet);
     render(<App />);
 
     const fetchingInfo = screen.queryByText('Carregando as tarefas...');
@@ -118,8 +120,7 @@ describe('Teste da aplicação inteira', () => {
       expect(selectStatus.value).toBe('pendente');
       const inputDate = screen.getByLabelText(createdAtLabel);
       expect(inputDate).toBeInTheDocument();
-      const arrDate1 = new Date().toLocaleDateString().split('/');
-      const date1 = `${arrDate1[2]}-${arrDate1[1]}-${arrDate1[0]}`;
+      const date1 = getTodayWithDashes();
       expect(inputDate.value).toBe(date1);
       expect(screen.getByText(buttonSaveTaskLabel)).toBeInTheDocument();
       const editBtnTask = screen.getByTestId('edit-button-task-0');
@@ -211,8 +212,7 @@ describe('Teste da aplicação inteira', () => {
     await wait(() => {
       expect(inputName.value).toBe('');
       expect(selectStatus.value).toBe('pendente');
-      const finalPosition = 10;
-      expect(inputDate.value).toBe(new Date().toISOString().substr(0, finalPosition));
+      expect(inputDate.value).toBe(getTodayWithDashes());
     });
   });
 

@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import TasksContext from './TasksContext';
 import { getAllTasks } from '../services/tasksAPI';
+import { getTodayWithDashes } from '../date';
 
 const TasksProvider = ({ children }) => {
-  const arrDateSlash = new Date().toLocaleDateString().split('/');
-  const today = `${arrDateSlash[2]}-${arrDateSlash[1]}-${arrDateSlash[0]}`;
+  const today = getTodayWithDashes();
 
   const [tasks, setTasks] = useState([]);
   const [isFetching, setIsFetching] = useState(true);
@@ -19,16 +19,16 @@ const TasksProvider = ({ children }) => {
   useEffect(() => {
     const fetchApi = async () => {
       const response = await getAllTasks();
-      let newFetch;
-      if (response.statusText === 'OK') {
-        newFetch = response.data;
+      let fetchedTasks = [];
+      if (response && response.statusText === 'OK') {
+        fetchedTasks = response.data;
       }
       if (sort !== 'sem ordenação') {
-        newFetch = newFetch.sort(
+        fetchedTasks = fetchedTasks.sort(
           (a, b) => a[sort].toLowerCase().localeCompare(b[sort].toLowerCase()),
         );
       }
-      setTasks(newFetch);
+      setTasks(fetchedTasks);
       setIsFetching(false);
     };
     if (reload) {

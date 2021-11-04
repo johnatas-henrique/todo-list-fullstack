@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import TasksContext from '../context/TasksContext';
+import { formatDateToDashes } from '../date';
 import { deleteTask } from '../services/tasksAPI';
 
 const handleChange = (e, callback) => {
@@ -32,8 +33,7 @@ const editTask = (taskId, allTasks, callback, setFunctions) => {
   const { setName, setStatus, setCreatedAt } = setFunctions;
   setName(task.name);
   setStatus(task.status);
-  const arrDate = task.createdAt.split('/');
-  const date = `${arrDate[2]}-${arrDate[1]}-${arrDate[0]}`;
+  const date = formatDateToDashes(task.createdAt);
   setCreatedAt(date);
 };
 
