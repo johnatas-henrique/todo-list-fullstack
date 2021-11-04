@@ -19,16 +19,16 @@ const TasksProvider = ({ children }) => {
   useEffect(() => {
     const fetchApi = async () => {
       const response = await getAllTasks();
-      let newFetch;
-      if (response.statusText === 'OK') {
-        newFetch = response.data;
+      let fetchedTasks = [];
+      if (response && response.statusText === 'OK') {
+        fetchedTasks = response.data;
       }
       if (sort !== 'sem ordenação') {
-        newFetch = newFetch.sort(
+        fetchedTasks = fetchedTasks.sort(
           (a, b) => a[sort].toLowerCase().localeCompare(b[sort].toLowerCase()),
         );
       }
-      setTasks(newFetch);
+      setTasks(fetchedTasks);
       setIsFetching(false);
     };
     if (reload) {
