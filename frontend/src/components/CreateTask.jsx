@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import TasksContext from '../context/TasksContext';
+import { formatDateToBR, getTodayWithDashes } from '../date';
 
 import { postTask, putTask } from '../services/tasksAPI';
 
@@ -10,8 +11,7 @@ const handleChange = (e, callback) => {
 
 const putThisTask = async (obj, reload, taskId, objCallbacks) => {
   const { name, status, createdAt } = obj;
-  const arrDate = createdAt.split('-');
-  const date = `${arrDate[2]}/${arrDate[1]}/${arrDate[0]}`;
+  const date = formatDateToBR(createdAt);
 
   const response = await putTask({ name, status, createdAt: date }, taskId);
   // if (response.code) alert(response.message);
@@ -21,29 +21,26 @@ const putThisTask = async (obj, reload, taskId, objCallbacks) => {
     const { setName, setStatus, setCreatedAt, setIsEdit } = objCallbacks;
     setName('');
     setStatus('pendente');
-    const arrDateSlash = new Date().toLocaleDateString().split('/');
-    const dateSlash = `${arrDateSlash[2]}-${arrDateSlash[1]}-${arrDateSlash[0]}`;
-    setCreatedAt(dateSlash);
+    const dateWithDashes = getTodayWithDashes();
+    setCreatedAt(dateWithDashes);
     setIsEdit(false);
   }
 };
 
 const postNewTask = async (obj, callback, objCallbacks) => {
   const { name, status, createdAt } = obj;
-  const arrDate = createdAt.split('-');
-  const date = `${arrDate[2]}/${arrDate[1]}/${arrDate[0]}`;
+  const date = formatDateToBR(createdAt);
 
   const response = await postTask({ name, status, createdAt: date });
   // if (response.code) alert(response.message);
 
-  if (response.statusText === 'Created') {
+  if (response && response.statusText === 'Created') {
     callback(true);
     const { setName, setStatus, setCreatedAt, setIsEdit } = objCallbacks;
     setName('');
     setStatus('pendente');
-    const arrDateSlash = new Date().toLocaleDateString().split('/');
-    const dateSlash = `${arrDateSlash[2]}-${arrDateSlash[1]}-${arrDateSlash[0]}`;
-    setCreatedAt(dateSlash);
+    const dateWithDashes = getTodayWithDashes();
+    setCreatedAt(dateWithDashes);
     setIsEdit(false);
   }
 };
