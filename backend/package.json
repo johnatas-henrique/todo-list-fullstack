@@ -1,0 +1,37 @@
+{
+  "name": "desafio-tecnico-trybe-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "lint": "eslint --no-inline-config --ext .js,.jsx --no-error-on-unmatched-pattern -c .eslintrc.json .",
+    "test": "mocha ./integration-tests/**/*$TEST_NAME*.{test,spec}.js --exit",
+    "test:coverage": "nyc --all npm test"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@joi/date": "^2.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-rescue": "^1.1.31",
+    "joi": "^17.4.2",
+    "mongodb": "^4.1.3",
+    "nodemon": "^2.0.14"
+  },
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "chai-http": "^4.3.0",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-trybe-backend": "^1.0.4",
+    "eslint-plugin-import": "^2.25.2",
+    "mocha": "^9.1.3",
+    "mongodb-memory-server": "6.9.6",
+    "nyc": "^15.1.0",
+    "sinon": "^11.1.2"
+  }
+}
