@@ -45,9 +45,6 @@ describe('Testes para a rota /tasks', function () {
       expect(response.body).to.be.an('object');
     });
 
-    it('Deve retornar uma mensagem de erro do banco de dados', function () {
-      expect(response.body.message).to.be.equal('Cannot read property \'db\' of null');
-    });
   });
 
   describe('Testes para o endpoint GET', function () {
