@@ -19,8 +19,9 @@
     "express": "^4.17.1",
     "express-rescue": "^1.1.31",
     "joi": "^17.4.2",
-    "mongodb": "^4.1.3",
-    "nodemon": "^2.0.14"
+    "mysql2": "^2.3.3",
+    "nodemon": "^2.0.14",
+    "sequelize": "^6.21.0"
   },
   "devDependencies": {
     "chai": "^4.3.4",
@@ -30,8 +31,8 @@
     "eslint-config-trybe-backend": "^1.0.4",
     "eslint-plugin-import": "^2.25.2",
     "mocha": "^9.1.3",
-    "mongodb-memory-server": "6.9.6",
     "nyc": "^15.1.0",
+    "sequelize-cli": "^6.4.1",
     "sinon": "^11.1.2"
   }
 }

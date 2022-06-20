@@ -1,40 +1,40 @@
 const chai = require('chai');
 const sinon = require('sinon');
 const chaiHttp = require('chai-http');
-const { MongoClient, ObjectId } = require('mongodb');
-const { getConnection } = require('./connectionMock');
+const MockModel = require('./modelMock');
 const app = require('../index');
+const { Tasks } = require('../models/index');
 
 const { expect } = chai;
 
 chai.use(chaiHttp);
 
-const INVALID_ID_1 = '12345678';
-const VALID_ID_1 = '617b6a525c769ab68b4036a0';
-const VALID_ID_2 = '617b6a525c769ab68b4036a1';
+const INVALID_ID_1 = '999';
 
 describe('Testes para a rota /tasks', function () {
-  let connectionMock;
   before(async function () {
-    connectionMock = await getConnection();
-    sinon.stub(MongoClient, 'connect').resolves(connectionMock);
+    sinon.stub(Tasks, 'findAll').callsFake(MockModel.findAll);
+    sinon.stub(Tasks, 'create').callsFake(MockModel.create);
+    sinon.stub(Tasks, 'findByPk').callsFake(MockModel.findByPk);
+    sinon.stub(Tasks, 'update').callsFake(MockModel.update);
   });
 
   after(async function () {
-    MongoClient.connect.restore();
-    await connectionMock.db('Ebytr').collection('Tasks').deleteMany({});
+    sinon.restore();
   });
 
   describe('Em caso de erro desconhecido', function () {
     let response;
 
     before(async function () {
-      MongoClient.connect.resolves(null);
+      Tasks.findAll.restore();
+      sinon.stub(Tasks, 'findAll').throws(null);
       response = await chai.request(app).get('/tasks');
     });
 
     after(async function () {
-      MongoClient.connect.resolves(connectionMock);
+      Tasks.findAll.restore();
+      sinon.stub(Tasks, 'findAll').callsFake(MockModel.findAll);
     });
 
     it('deve receber um código HTTP 500', function () {
@@ -44,7 +44,6 @@ describe('Testes para a rota /tasks', function () {
     it('Deve receber um objeto de erro', function () {
       expect(response.body).to.be.an('object');
     });
-
   });
 
   describe('Testes para o endpoint GET', function () {
@@ -112,7 +111,7 @@ describe('Testes para a rota /tasks', function () {
 
       before(async function () {
         response = await chai.request(app).post('/tasks')
-          .send({ name: 'Johnatas', status: 'pendente', createdAt: '20/10/2021' });
+          .send({ name: 'Johnatas', status: 'pendente', createdAt: '2021/10/20' });
       });
 
       it('deve receber um código HTTP 201', function () {
@@ -156,9 +155,9 @@ describe('Testes para a rota /tasks', function () {
 
         before(async function () {
           response = await chai.request(app).put(`/tasks/${INVALID_ID_1}`)
-            .send({ name: 'Johnatas', status: 'pendente', createdAt: '20/10/2021' });
+            .send({ name: 'Johnatas', status: 'pendente', createdAt: '2022/03/21' });
         });
-     
+
         it('deve receber um código HTTP 404', function () {
           expect(response).to.have.status(404);
         });
@@ -177,15 +176,12 @@ describe('Testes para a rota /tasks', function () {
       let response;
 
       before(async function () {
-        await connectionMock.db('Ebytr').collection('Tasks')
-          .insertOne({
-            _id: ObjectId(VALID_ID_1),
-            name: 'Fazer testes 001',
-            status: 'pendente',
-            createdAt: '28/10/2021',
-          });
+        const resp1 = await chai.request(app).post('/tasks/').send({
+          name: 'Fazer testes 001', status: 'pendente', createdAt: '2022/06/19',
+        });
 
-        response = await chai.request(app).put(`/tasks/${VALID_ID_1}`)
+        const dangleId = '_id';
+        response = await chai.request(app).put(`/tasks/${resp1.body[dangleId]}`)
           .send({ name: 'Continuar testes', status: 'andamento', createdAt: '29/10/2021' });
       });
 
@@ -228,17 +224,14 @@ describe('Testes para a rota /tasks', function () {
       let response;
 
       before(async function () {
-        await connectionMock.db('Ebytr').collection('Tasks')
-          .insertOne({
-            _id: VALID_ID_2,
-            name: 'Fazer testes 001',
-            status: 'pendente',
-            createdAt: '28/10/2021',
-          });
+        const resp2 = await chai.request(app).post('/tasks/').send({
+          name: 'Fazer testes 002', status: 'pendente', createdAt: '2022/06/20',
+        });
 
-        response = await chai.request(app).delete(`/tasks/${VALID_ID_2}`);
+        const dangleId = '_id';
+        response = await chai.request(app).delete(`/tasks/${resp2.body[dangleId]}`);
       });
-     
+
       it('deve receber um código HTTP 204', function () {
         expect(response).to.have.status(204);
       });

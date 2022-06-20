@@ -11,6 +11,15 @@ const handleChange = (e, callback) => {
     setReload(true);
   }
   if (value !== 'sem ordenação') {
+    if (value === 'createdAt') {
+      const sortedTasks = tasks.sort(
+        (a, b) => new Date(formatDateToDashes(a.createdAt)).getTime()
+          - new Date(formatDateToDashes(b.createdAt)).getTime(),
+      );
+      setTasks(sortedTasks);
+      return;
+    }
+
     const sortedTasks = tasks.sort(
       (a, b) => a[value].toLowerCase().localeCompare(b[value].toLowerCase()),
     );
